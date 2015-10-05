@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
 	del = require('del'),
+	ghPages = require('gulp-gh-pages'),
 	developTask = require('./tasks/develop-task')(),
 	productionTask = require('./tasks/production-task')();
 
@@ -14,3 +15,8 @@ gulp.task('default', ['clear', 'copy:tmp', 'less:tmp', 'js:tmp', 'webserver'], f
 });
 
 gulp.task('build', ['clear', 'include', 'copy:dist', 'less:dist', 'js:dist']);
+
+gulp.task('deploy', function () {
+	return gulp.src('./dist/**/*')
+		.pipe(ghPages());
+});
