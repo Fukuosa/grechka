@@ -4,12 +4,19 @@ var gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer'),
 	browserify = require('gulp-browserify'),
 	babelify = require('babelify'),
-	uglifyify = require('uglifyify');
+	uglifyify = require('uglifyify'),
+	fileInclude = require('gulp-file-include');
 
 module.exports = function () {
 
+	gulp.task('include', function () {
+		gulp.src('index.html')
+			.pipe(fileInclude())
+			.pipe(gulp.dest('dist'));
+	});
+
 	gulp.task('copy:dist', function () {
-		gulp.src(['index.html', 'favicon.ico']).pipe(gulp.dest('dist'));
+		gulp.src('favicon.ico').pipe(gulp.dest('dist'));
 	});
 
 	gulp.task('less:dist', function () {
@@ -30,5 +37,4 @@ module.exports = function () {
 			}))
 			.pipe(gulp.dest('dist/js'));
 	});
-
 };

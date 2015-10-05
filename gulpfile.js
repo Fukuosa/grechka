@@ -13,4 +13,4 @@ gulp.task('default', ['clear', 'copy:tmp', 'less:tmp', 'js:tmp', 'webserver'], f
 	gulp.watch('less/**/*.less', ['less:tmp']);
 });
 
-gulp.task('build', ['clear', 'copy:dist', 'less:dist', 'js:dist']);
+gulp.task('build', ['clear', 'include', 'copy:dist', 'less:dist', 'js:dist']);
