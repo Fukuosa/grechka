@@ -1,49 +1,16 @@
 var gulp = require('gulp'),
-	less = require('gulp-less'),
-	minifyCss = require('gulp-minify-css'),
-	autoprefixer = require('gulp-autoprefixer'),
-	connect = require('gulp-connect'),
-	browserify = require('gulp-browserify'),
-	babelify = require('babelify'),
-	uglifyify = require('uglifyify');
+	del = require('del'),
+	developTask = require('./tasks/develop-task')(),
+	productionTask = require('./tasks/production-task')();
 
-gulp.task('copy', function () {
-	gulp.src(['index.html', 'favicon.ico'])
-		.pipe(connect.reload())
-		.pipe(gulp.dest('dist'));
+gulp.task('clear', function () {
+	del(['.tmp', 'dist']);
 });
 
-gulp.task('less', function () {
-	gulp.src('less/app.less')
-		.pipe(less())
-		.pipe(autoprefixer({
-			browsers: ['last 4 versions'],
-			cascade: false
-		}))
-		.pipe(minifyCss())
-		.pipe(connect.reload())
-		.pipe(gulp.dest('dist/css'));
+gulp.task('default', ['clear', 'copy:tmp', 'less:tmp', 'js:tmp', 'webserver'], function () {
+	gulp.watch('index.html', ['copy:tmp']);
+	gulp.watch('js/**/*.js', ['js:tmp']);
+	gulp.watch('less/**/*.less', ['less:tmp']);
 });
 
-gulp.task('js', function () {
-	gulp.src('js/app.js')
-		.pipe(browserify({
-			transform: ['babelify', 'uglifyify'],
-			debug: !gulp.env.production
-		}))
-		.pipe(gulp.dest('dist/js'));
-});
-
-gulp.task('webserver', function () {
-	connect.server({
-		root: ['dist'],
-		port: 3501,
-		livereload: true
-	});
-});
-
-gulp.task('default', ['copy', 'js', 'less', 'webserver'], function () {
-	gulp.watch('index.html', ['copy']);
-	gulp.watch('js/**/*.js', ['js']);
-	gulp.watch('less/**/*.less', ['less']);
-});
+gulp.task('build', ['clear', 'copy:dist', 'less:dist', 'js:dist']);
