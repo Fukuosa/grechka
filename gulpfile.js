@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 	uglifyify = require('uglifyify');
 
 gulp.task('copy', function () {
-	gulp.src('index.html')
+	gulp.src(['index.html', 'favicon.ico'])
 		.pipe(connect.reload())
 		.pipe(gulp.dest('dist'));
 });
